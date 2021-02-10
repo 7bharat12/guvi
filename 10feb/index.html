@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Cards</title>
+  </head>
+  <body>
+    <script>
+        var box1 = document.createElement("div");
+        box1.setAttribute("id", "outer");
+        box1.style.width = 98 + "%";
+        box1.style.padding = 10 + "px";
+        box1.style.borderColor = "black";
+        box1.style.borderStyle = "solid";
+        box1.style.borderWidth = "5px";
+  
+        async function getAllCountry() {
+          try {
+            var country = await fetch("https://restcountries.eu/rest/v2/all");
+            var data = await country.json();
+            console.log(data);
+            for(let i=0;i<data.length;i++)
+            {
+              var box2 = document.createElement("div");
+              box2.setAttribute("id", "inner");
+              box2.style.width = 300 + "px";
+              box2.style.padding = 10 + "px";
+              box2.style.borderColor = "blue";
+              box2.style.borderStyle = "solid";
+              box2.style.borderRadius= 10+"px"
+              box2.style.borderWidth = "3px";
+              box2.style.display = "inline-block";
+              box2.style.textAlign="center"
+              box2.style.backgroundColor="lightgreen"
+  
+              var name= document.createElement("div");
+              name.setAttribute("id","coun"+i);
+              name.innerHTML=data[i].name;
+              name.style.backgroundColor= "yellow";
+              name.style.fontSize="20px"
+              name.style.fontFamily="Comic Sans MS"
+              name.style.fontWeight="bold"
+              box2.appendChild(name);
+  
+              var image= document.createElement("img");
+              image.src= data[i].flag;
+              image.width= 150;
+              image.height= 100;
+              image.style.textAlign="center"
+              image.style.borderStyle="solid"
+              image.style.borderWidth = "2px";
+              box2.appendChild(image);
+  
+              var capital= document.createElement("div");
+              capital.setAttribute("id","cap"+i);
+              capital.innerHTML="<u>Capital:</u> "+data[i].capital;
+              capital.style.fontSize="16px"
+              capital.style.fontFamily="Helvetica"
+              capital.style.fontWeight="bold"
+              box2.appendChild(capital);
+  
+              var region= document.createElement("div");
+              region.setAttribute("id","reg"+i);
+              region.innerHTML="<u>Region:</u> "+data[i].region;
+              region.style.fontSize="16px"
+              region.style.fontFamily="Helvetica"
+              region.style.fontWeight="bold"
+              box2.appendChild(region);
+  
+              var code= document.createElement("div");
+              code.setAttribute("id","cd"+i);
+              code.innerHTML="<u>Country Code:</u> "+data[i].alpha3Code;
+              code.style.fontSize="16px"
+              code.style.fontFamily="Helvetica"
+              code.style.fontWeight="bold"
+              box2.appendChild(code);
+              
+              var btn = document.createElement("BUTTON");
+              btn.setAttribute("id","weath"+i);
+              btn.type="button";
+              var ca= data[i].capital;
+              console.log(ca);
+              btn.setAttribute("onclick","getWeather('"+data[i].capital+"')");
+              btn.innerHTML = "Get Weather!";
+              box2.appendChild(btn);
+              box1.appendChild(box2);
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        }
+        getAllCountry();
+        async function getWeather(city)
+        {
+          try{
+            console.log(city);
+            var weather= await fetch("https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=eb87a9f61cb3d6f4ddb378f19cc9c7ab")
+            var inf= await weather.json();
+            alert("Temperature: "+inf.main.temp+'\n'+"Description: "+inf.weather[0].description);
+          }
+          catch(error)
+          {
+            console.log(error)
+          }
+        }
+        document.body.appendChild(box1);
+      </script>
+  </body>
+</html>
